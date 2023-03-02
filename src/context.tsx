@@ -13,13 +13,42 @@ interface IUserContext {
   selectedMonth: Month;
   events: Event[];
 }
+interface EventModalState {
+  displayed: boolean;
+  content: Event | null;
+}
+interface AddModalState {
+  day: string;
+  displayed: boolean;
+}
 
 const useCalendarContext = (initState: IUserContext) => {
   const [state, setState] = useState<IUserContext>(initState);
+  const [eventModal, setEventModal] = useState<EventModalState>({
+    displayed: false,
+    content: null,
+  });
+  const [addEventModal, setAddEventModal] = useState<AddModalState>({
+    day: "",
+    displayed: false,
+  });
   const handleState = (arg: IUserContext) => {
     setState(arg);
   };
-  return { state, handleState };
+  const handleEventModal = (arg: EventModalState) => {
+    setEventModal(arg);
+  };
+  const handleAddEventModal = (arg: AddModalState) => {
+    setAddEventModal(arg);
+  };
+  return {
+    state,
+    handleState,
+    eventModal,
+    handleEventModal,
+    addEventModal,
+    handleAddEventModal,
+  };
 };
 
 const initialState: IUserContext = {
@@ -29,16 +58,39 @@ const initialState: IUserContext = {
 };
 const UserContext = createContext<ReturnType<typeof useCalendarContext>>({
   state: initialState,
-  handleState: (initialState) => {},
+  handleState: (initialState: IUserContext) => {},
+  eventModal: {
+    displayed: false,
+    content: null,
+  },
+  addEventModal: { day: "", displayed: false },
+  handleAddEventModal: (arg: AddModalState) => {},
+  handleEventModal: (arg: EventModalState) => {},
 });
 type ChildrenType = {
   children?: ReactElement | undefined;
 };
 
 export const UserContextProvider = ({ children }: ChildrenType) => {
-  const { state, handleState } = useCalendarContext(initialState);
+  const {
+    state,
+    handleState,
+    addEventModal,
+    eventModal,
+    handleAddEventModal,
+    handleEventModal,
+  } = useCalendarContext(initialState);
   return (
-    <UserContext.Provider value={{ state, handleState }}>
+    <UserContext.Provider
+      value={{
+        state,
+        handleState,
+        addEventModal,
+        eventModal,
+        handleAddEventModal,
+        handleEventModal,
+      }}
+    >
       {children}
     </UserContext.Provider>
   );

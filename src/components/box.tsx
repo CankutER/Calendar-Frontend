@@ -1,14 +1,22 @@
-import { ReactElement } from "react";
+import { ReactElement, useState } from "react";
 import { useGlobalContext } from "../context";
 import { months } from "../utils/timeUtils";
 import { Event } from "../context";
+import { AiOutlinePlusSquare } from "react-icons/ai";
+import { EventModal } from "./eventModal";
+import { SingleEvent } from "./event";
 interface BoxProps {
   box: Date;
   events: Event[] | null;
 }
 
 export const Box = ({ box, events }: BoxProps): ReactElement => {
-  const { state, handleState } = useGlobalContext();
+  const { state, handleState, addEventModal, handleAddEventModal } =
+    useGlobalContext();
+
+  const openAddModal = () => {
+    handleAddEventModal({ day: box.getDate().toString(), displayed: true });
+  };
 
   return (
     <div
@@ -18,15 +26,18 @@ export const Box = ({ box, events }: BoxProps): ReactElement => {
           : ""
       }`}
     >
-      <p className="date-info">{box.getDate()}</p>
+      <p className="date-info d-flex justify-content-between align-items-center">
+        <span className="box-date"> {box.getDate()}</span>
+
+        <AiOutlinePlusSquare onClick={openAddModal} />
+      </p>
       <div className="text-center d-grid">
-        {events?.map((event) => {
-          return (
-            <p key={event.eventId} className="single-event">
-              {event.event}
-            </p>
-          );
-        })}
+        {months[box.getMonth()] === state.selectedMonth &&
+          events?.map((event) => {
+            return (
+              <SingleEvent key={event.eventId} event={event}></SingleEvent>
+            );
+          })}
       </div>
     </div>
   );

@@ -6,13 +6,14 @@ import { DateSelection } from "../components/dateSelection";
 import { Board } from "../components/board";
 import { useGlobalContext } from "../context";
 import { getToken, getUserName } from "../utils/getSessionInfo";
-
-const API_URL =
+import { EventModal } from "../components/eventModal";
+import { AddEventModal } from "../components/addEventModal";
+export const API_URL =
   "https://u8h02kmfpb.execute-api.eu-central-1.amazonaws.com/prod/user";
 
 export function UserPage(): ReactElement {
   const [username, setUsername] = useState<string>("");
-  const { state, handleState } = useGlobalContext();
+  const { state, handleState, eventModal, addEventModal } = useGlobalContext();
   const navigate = useNavigate();
 
   const checkUser = async () => {
@@ -64,7 +65,7 @@ export function UserPage(): ReactElement {
   }, [state.selectedMonth, state.selectedYear]);
 
   return (
-    <main>
+    <main className="position-relative vw-100 vh-100">
       <header className="d-flex justify-content-around py-3">
         <h1>Welcome {username}</h1>
         <button className="btn btn-primary" onClick={logOut}>
@@ -73,6 +74,8 @@ export function UserPage(): ReactElement {
       </header>
       <DateSelection></DateSelection>
       <Board></Board>
+      {eventModal.displayed && <EventModal></EventModal>}
+      {addEventModal.displayed && <AddEventModal></AddEventModal>}
     </main>
   );
 }
