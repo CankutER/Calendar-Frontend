@@ -53,6 +53,7 @@ export function UserPage(): ReactElement {
       console.log(items);
 
       handleState({ ...state, events: items });
+      console.log("state changed");
     } catch (err) {
       console.log(err);
     }

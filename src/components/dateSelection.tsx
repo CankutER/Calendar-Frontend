@@ -13,7 +13,7 @@ export const DateSelection = (): ReactElement => {
         className="form-select w-25"
         value={state.selectedYear}
         onChange={(e) => {
-          handleState({ ...state, selectedYear: e.target.value });
+          handleState({ ...state, selectedYear: e.target.value, events: [] });
         }}
       >
         {years.map((year, i) => (
@@ -28,7 +28,11 @@ export const DateSelection = (): ReactElement => {
         className="form-select w-25"
         value={state.selectedMonth}
         onChange={(e) => {
-          handleState({ ...state, selectedMonth: e.target.value as Month });
+          handleState({
+            ...state,
+            selectedMonth: e.target.value as Month,
+            events: [],
+          });
         }}
       >
         {months.map((year, i) => (

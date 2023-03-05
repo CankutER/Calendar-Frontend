@@ -4,6 +4,7 @@ import { buildCalendar } from "../utils/buildBoard";
 import { Box } from "./box";
 import { convertEventsToMap } from "../utils/convertToMap";
 import { Event } from "../context";
+import { days } from "../utils/timeUtils";
 
 export const Board = (): ReactElement => {
   const { state, handleState } = useGlobalContext();
@@ -18,6 +19,21 @@ export const Board = (): ReactElement => {
 
   return (
     <section className="container main-board">
+      {days.map((day, i) => {
+        if (i !== days.length - 1) {
+          return (
+            <h4 key={i} className="text-capitalize text-center">
+              {days[i + 1]}
+            </h4>
+          );
+        } else {
+          return (
+            <h4 key={i} className="text-capitalize text-center">
+              {days[0]}
+            </h4>
+          );
+        }
+      })}
       {monthCalendar.map((box, i) => {
         return (
           <Box
